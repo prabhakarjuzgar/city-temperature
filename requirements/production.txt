@@ -1,0 +1,10 @@
+Flask
+flask-login
+flask-sqlalchemy
+flask-httpauth
+psycopg2
+flask-migrate
+click
+sqlalchemy_utils
+cryptography
+gunicorn

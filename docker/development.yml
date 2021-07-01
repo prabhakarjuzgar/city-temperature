@@ -1,0 +1,33 @@
+version: "3"
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  app:
+    build:
+      context: ${PWD}
+      dockerfile: docker/Dockerfile
+    environment:
+      FLASK_ENV: ${FLASK_ENV}
+      FLASK_CONFIG: ${FLASK_CONFIG}
+      APPLICATION_DB: ${APPLICATION_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_HOSTNAME: "db"
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      SECRET_KEY: ${SECRET_KEY}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+    command: /usr/local/bin/gunicorn -w 2 -b :5000 wsgi:app
+    volumes:
+      - ${PWD}:/opt/application
+    ports:
+      - "5000:5000"
+
+volumes:
+  pgdata:
